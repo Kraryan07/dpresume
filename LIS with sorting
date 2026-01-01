@@ -1,0 +1,52 @@
+bottom up approach
+class Solution {
+public:
+    int findLongestChain(vector<vector<int>>& pairs) {
+        int n=pairs.size();
+        vector<int>t(n,1);
+        sort(pairs.begin(),pairs.end());
+         int maxi=0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<i;j++){
+              if(pairs[i][0]>pairs[j][1] && t[i]<t[j]+1){
+                t[i]=t[j]+1;
+              }
+            }
+            maxi=max(maxi,t[i]);
+        }
+        return maxi;
+    }
+};
+
+recursion and memoisation
+class Solution {
+public:
+    int t[1001][1001];
+    int maxsum(int i,vector<vector<int>>&pairs,int p){
+        if(i>=pairs.size()){
+            return 0;
+        }
+
+        //take
+        if(p!=-1){
+        if(t[i][p]!=-1) return t[i][p];
+        }
+        int take=0;
+        if(p==-1||pairs[i][0]>pairs[p][1]){
+            take=1+maxsum(i+1,pairs,i);
+        }
+        int nottake=maxsum(i+1,pairs,p);
+
+        if(p!=-1){
+         t[i][p]=max(take,nottake);
+        }
+        return max(take,nottake);
+    }
+    int findLongestChain(vector<vector<int>>& pairs) {
+        memset(t,-1,sizeof(t));
+        int n=pairs.size();
+        vector<int>t(n,1);
+        sort(pairs.begin(),pairs.end());
+        return maxsum(0,pairs,-1);
+    }
+};
