@@ -1,0 +1,23 @@
+#include<bits/stdc++.h>
+int lisInCircularManner(int n, vector<int> &arr) {
+    // Write your code here.
+    // int n=arr.size();
+    int maxi=0;
+    for(int i=0;i<n;i++){
+        vector<int>temp;
+        temp.push_back(arr[i]);
+        int j=(i+1)%n;
+        while(j!=i){
+            if(temp.size()==0||temp.back()<arr[j]){
+                temp.push_back(arr[j]);
+            }
+            else{
+                int k=lower_bound(temp.begin(),temp.end(),arr[j])-temp.begin();
+                temp[k]=arr[j];
+            }
+            j=(j+1)%n;   
+        }
+        maxi=max(maxi,int(temp.size()));
+    }
+    return maxi;
+}
